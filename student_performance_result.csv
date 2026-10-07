@@ -1,0 +1,26 @@
+Student_ID,Name,Department,Subject,Marks,Attendance,Grade,Result,Performance
+101,Rahul Sharma,CSE,Python,85,92,A,Pass,Excellent
+102,Anjali Verma,AI&DS,Python,91,95,A+,Pass,Excellent
+103,Rohan Mehta,CSE,Data Science,78,88,B,Pass,Good
+104,Priya Nair,AI&DS,Machine Learning,94,96,A+,Pass,Excellent
+105,Vikram Singh,CSE,SQL,65,72,C,Pass,Good
+106,Sneha Gupta,AI&DS,Mathematics,88,90,A,Pass,Excellent
+107,Amit Patel,CSE,Python,38,68,F,Fail,Poor
+108,Neha Kapoor,AI&DS,Data Science,72,82,B,Pass,Good
+109,Karan Joshi,CSE,Machine Learning,54,70,D,Pass,Average
+110,Pooja Redy,AI&DS,SQL,82,89,A,Pass,Excellent
+111,Siddharth Rao,CSE,Mathematics,95,98,A+,Pass,Excellent
+112,Divya Bhat,AI&DS,Python,45,80,F,Pass,Average
+113,Aakash Kumar,CSE,Data Science,62,65,C,Pass,Good
+114,Kavya Sharma,AI&DS,Machine Learning,89,94,A,Pass,Excellent
+115,Manish Jain,CSE,SQL,32,55,F,Fail,Poor
+116,Riya Sen,AI&DS,Mathematics,76,84,B,Pass,Good
+117,Varun Mishra,CSE,Python,90,91,A+,Pass,Excellent
+118,Shreya Das,AI&DS,Data Science,58,74,D,Pass,Average
+119,Arjun Saxena,CSE,Machine Learning,81,87,A,Pass,Excellent
+120,Meera lyer,AI&DS,SQL,67,79,C,Pass,Good
+121,Gaurav Choudhary,CSE,Mathematics,42,60,F,Pass,Average
+122,Tanvi Deshmukh,AI&DS,Python,96,97,A+,Pass,Excellent
+123,Harsh Vardhan,CSE,Data Science,73,81,B,Pass,Good
+124,Isha Malhotra,AI&DS,Machine Learning,35,50,F,Fail,Poor
+125,Deepak Yadav,CSE,SQL,87,93,A,Pass,Excellent
