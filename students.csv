@@ -1,0 +1,26 @@
+Student_ID,Name,Department,Subject,Marks,Attendance
+101,Rahul Sharma,CSE,Python,85,92
+102,Anjali Verma,AI&DS,Python,91,95
+103,Rohan Mehta,CSE,Data Science,78,88
+104,Priya Nair,AI&DS,Machine Learning,94,96
+105,Vikram Singh,CSE,SQL,65,72
+106,Sneha Gupta,AI&DS,Mathematics,88,90
+107,Amit Patel,CSE,Python,38,68
+108,Neha Kapoor,AI&DS,Data Science,72,82
+109,Karan Joshi,CSE,Machine Learning,54,70
+110,Pooja Redy,AI&DS,SQL,82,89
+111,Siddharth Rao,CSE,Mathematics,95,98
+112,Divya Bhat,AI&DS,Python,45,80
+113,Aakash Kumar,CSE,Data Science,62,65
+114,Kavya Sharma,AI&DS,Machine Learning,89,94
+115,Manish Jain,CSE,SQL,32,55
+116,Riya Sen,AI&DS,Mathematics,76,84
+117,Varun Mishra,CSE,Python,90,91
+118,Shreya Das,AI&DS,Data Science,58,74
+119,Arjun Saxena,CSE,Machine Learning,81,87
+120,Meera lyer,AI&DS,SQL,67,79
+121,Gaurav Choudhary,CSE,Mathematics,42,60
+122,Tanvi Deshmukh,AI&DS,Python,96,97
+123,Harsh Vardhan,CSE,Data Science,73,81
+124,Isha Malhotra,AI&DS,Machine Learning,35,50
+125,Deepak Yadav,CSE,SQL,87,93
