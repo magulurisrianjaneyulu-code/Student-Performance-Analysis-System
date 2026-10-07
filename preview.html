@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Performance Analysis System - Interactive Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary-accent: #6366f1;
+      --primary-hover: #4f46e5;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* Metric Cards Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .metric-card h3 {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .metric-card .subtext {
+      font-size: 0.85rem;
+      color: var(--success);
+      margin-top: 0.25rem;
+    }
+
+    /* Tabs Navigation */
+    .tabs-nav {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 0.5rem;
+      border-radius: 0.75rem;
+      border: 1px solid var(--card-border);
+      margin-bottom: 1.5rem;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .tab-btn.active {
+      background: var(--primary-accent);
+      color: white;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    /* Table Container */
+    .table-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      background: rgba(15, 23, 42, 0.8);
+      padding: 1rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 2px solid var(--card-border);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      font-size: 0.95rem;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    /* Status Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.65rem;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-pass { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-fail { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .badge-aplus { background: rgba(192, 132, 252, 0.2); color: #e9d5ff; border: 1px solid rgba(192, 132, 252, 0.3); }
+    .badge-a { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border: 1px solid rgba(99, 102, 241, 0.3); }
+    .badge-b { background: rgba(59, 130, 246, 0.2); color: #93c5fd; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-c { background: rgba(245, 158, 11, 0.2); color: #fde047; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-d { background: rgba(249, 115, 22, 0.2); color: #ffedd5; border: 1px solid rgba(249, 115, 22, 0.3); }
+    .badge-f { background: rgba(239, 68, 68, 0.2); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Student Performance Analysis System</h1>
+      <p>Interactive Visual Dashboard • Python, Pandas & NumPy Analysis Engine</p>
+    </header>
+
+    <!-- Top Summary Metrics -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <h3>Total Students</h3>
+        <div class="value">25</div>
+        <div class="subtext">CSE & AI&DS Departments</div>
+      </div>
+      <div class="metric-card">
+        <h3>Class Average</h3>
+        <div class="value">71.00</div>
+        <div class="subtext">Highest: 96.0 | Lowest: 32.0</div>
+      </div>
+      <div class="metric-card">
+        <h3>Average Attendance</h3>
+        <div class="value">81.20%</div>
+        <div class="subtext">Target Threshold: 75%</div>
+      </div>
+      <div class="metric-card">
+        <h3>Pass Rate</h3>
+        <div class="value">88%</div>
+        <div class="subtext">22 Passed / 3 Failed</div>
+      </div>
+    </div>
+
+    <!-- Tab Navigation -->
+    <div class="tabs-nav">
+      <button class="tab-btn active" onclick="switchTab('dataset')">Full Dataset (25)</button>
+      <button class="tab-btn" onclick="switchTab('top5')">Top 5 Leaderboard</button>
+      <button class="tab-btn" onclick="switchTab('subject')">Subject Analysis</button>
+      <button class="tab-btn" onclick="switchTab('department')">Department Analysis</button>
+      <button class="tab-btn" onclick="switchTab('attention')">Needs Attention (9)</button>
+    </div>
+
+    <!-- Tab 1: Dataset -->
+    <div id="dataset" class="tab-content active">
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Dept</th>
+              <th>Subject</th>
+              <th>Marks</th>
+              <th>Attendance</th>
+              <th>Grade</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody id="dataset-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 2: Top 5 -->
+    <div id="top5" class="tab-content">
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Department</th>
+              <th>Marks</th>
+              <th>Grade</th>
+              <th>Attendance</th>
+            </tr>
+          </thead>
+          <tbody id="top5-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 3: Subject Analysis -->
+    <div id="subject" class="tab-content">
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Subject Name</th>
+              <th>Students Enrolled</th>
+              <th>Average Marks</th>
+              <th>Highest Mark</th>
+              <th>Lowest Mark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Mathematics</td><td>4</td><td>75.25</td><td>95</td><td>42</td></tr>
+            <tr><td>Python</td><td>6</td><td>74.17</td><td>96</td><td>38</td></tr>
+            <tr><td>Machine Learning</td><td>5</td><td>70.60</td><td>94</td><td>35</td></tr>
+            <tr><td>Data Science</td><td>5</td><td>68.60</td><td>78</td><td>58</td></tr>
+            <tr><td>SQL</td><td>5</td><td>66.60</td><td>87</td><td>32</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 4: Department Analysis -->
+    <div id="department" class="tab-content">
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Department</th>
+              <th>Students Count</th>
+              <th>Average Marks</th>
+              <th>Highest Mark</th>
+              <th>Lowest Mark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>AI&DS</td><td>12</td><td>74.42</td><td>96</td><td>35</td></tr>
+            <tr><td>CSE</td><td>13</td><td>67.85</td><td>95</td><td>32</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tab 5: Students Needing Attention -->
+    <div id="attention" class="tab-content">
+      <div class="table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Student Name</th>
+              <th>Marks</th>
+              <th>Attendance</th>
+              <th>Grade</th>
+              <th>Result</th>
+              <th>Alert Reason</th>
+            </tr>
+          </thead>
+          <tbody id="attention-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+    <footer>
+      <p>Student Performance Analysis System • Academic Assignment Project</p>
+    </footer>
+  </div>
+  <script>
+    const studentsData = [
+      { id: 101, name: "Rahul Sharma", dept: "CSE", subj: "Python", marks: 85, att: 92, grade: "A", result: "Pass" },
+      { id: 102, name: "Anjali Verma", dept: "AI&DS", subj: "Python", marks: 91, att: 95, grade: "A+", result: "Pass" },
+      { id: 103, name: "Rohan Mehta", dept: "CSE", subj: "Data Science", marks: 78, att: 88, grade: "B", result: "Pass" },
+      { id: 104, name: "Priya Nair", dept: "AI&DS", subj: "Machine Learning", marks: 94, att: 96, grade: "A+", result: "Pass" },
+      { id: 105, name: "Vikram Singh", dept: "CSE", subj: "SQL", marks: 65, att: 72, grade: "C", result: "Pass" },
+      { id: 106, name: "Sneha Gupta", dept: "AI&DS", subj: "Mathematics", marks: 88, att: 90, grade: "A", result: "Pass" },
+      { id: 107, name: "Amit Patel", dept: "CSE", subj: "Python", marks: 38, att: 68, grade: "F", result: "Fail" },
+      { id: 108, name: "Neha Kapoor", dept: "AI&DS", subj: "Data Science", marks: 72, att: 82, grade: "B", result: "Pass" },
+      { id: 109, name: "Karan Joshi", dept: "CSE", subj: "Machine Learning", marks: 54, att: 70, grade: "D", result: "Pass" },
+      { id: 110, name: "Pooja Redy", dept: "AI&DS", subj: "SQL", marks: 82, att: 89, grade: "A", result: "Pass" },
+      { id: 111, name: "Siddharth Rao", dept: "CSE", subj: "Mathematics", marks: 95, att: 98, grade: "A+", result: "Pass" },
+      { id: 112, name: "Divya Bhat", dept: "AI&DS", subj: "Python", marks: 45, att: 80, grade: "F", result: "Pass" },
+      { id: 113, name: "Aakash Kumar", dept: "CSE", subj: "Data Science", marks: 62, att: 65, grade: "C", result: "Pass" },
+      { id: 114, name: "Kavya Sharma", dept: "AI&DS", subj: "Machine Learning", marks: 89, att: 94, grade: "A", result: "Pass" },
+      { id: 115, name: "Manish Jain", dept: "CSE", subj: "SQL", marks: 32, att: 55, grade: "F", result: "Fail" },
+      { id: 116, name: "Riya Sen", dept: "AI&DS", subj: "Mathematics", marks: 76, att: 84, grade: "B", result: "Pass" },
+      { id: 117, name: "Varun Mishra", dept: "CSE", subj: "Python", marks: 90, att: 91, grade: "A+", result: "Pass" },
+      { id: 118, name: "Shreya Das", dept: "AI&DS", subj: "Data Science", marks: 58, att: 74, grade: "D", result: "Pass" },
+      { id: 119, name: "Arjun Saxena", dept: "CSE", subj: "Machine Learning", marks: 81, att: 87, grade: "A", result: "Pass" },
+      { id: 120, name: "Meera lyer", dept: "AI&DS", subj: "SQL", marks: 67, att: 79, grade: "C", result: "Pass" },
+      { id: 121, name: "Gaurav Choudhary", dept: "CSE", subj: "Mathematics", marks: 42, att: 60, grade: "F", result: "Pass" },
+      { id: 122, name: "Tanvi Deshmukh", dept: "AI&DS", subj: "Python", marks: 96, att: 97, grade: "A+", result: "Pass" },
+      { id: 123, name: "Harsh Vardhan", dept: "CSE", subj: "Data Science", marks: 73, att: 81, grade: "B", result: "Pass" },
+      { id: 124, name: "Isha Malhotra", dept: "AI&DS", subj: "Machine Learning", marks: 35, att: 50, grade: "F", result: "Fail" },
+      { id: 125, name: "Deepak Yadav", dept: "CSE", subj: "SQL", marks: 87, att: 93, grade: "A", result: "Pass" }
+    ];
+
+    function getGradeBadge(grade) {
+      const cls = grade.replace('+', 'plus').toLowerCase();
+      return `<span class="badge badge-${cls}">${grade}</span>`;
+    }
+
+    function getResultBadge(res) {
+      const cls = res.toLowerCase();
+      return `<span class="badge badge-${cls}">${res}</span>`;
+    }
+
+    // Populate Full Dataset
+    const dsBody = document.getElementById('dataset-tbody');
+    studentsData.forEach(s => {
+      dsBody.innerHTML += `
+        <tr>
+          <td>${s.id}</td>
+          <td><strong>${s.name}</strong></td>
+          <td>${s.dept}</td>
+          <td>${s.subj}</td>
+          <td>${s.marks}</td>
+          <td>${s.att}%</td>
+          <td>${getGradeBadge(s.grade)}</td>
+          <td>${getResultBadge(s.result)}</td>
+        </tr>
+      `;
+    });
+
+    // Populate Top 5
+    const top5Body = document.getElementById('top5-tbody');
+    const sorted = [...studentsData].sort((a,b) => b.marks - a.marks).slice(0, 5);
+    sorted.forEach((s, idx) => {
+      top5Body.innerHTML += `
+        <tr>
+          <td>#${idx + 1}</td>
+          <td>${s.id}</td>
+          <td><strong>${s.name}</strong></td>
+          <td>${s.dept}</td>
+          <td><strong>${s.marks}</strong></td>
+          <td>${getGradeBadge(s.grade)}</td>
+          <td>${s.att}%</td>
+        </tr>
+      `;
+    });
+
+    // Populate Attention Needed
+    const attBody = document.getElementById('attention-tbody');
+    const filtered = studentsData.filter(s => s.marks < 50 || s.att < 75);
+    filtered.forEach(s => {
+      let reasons = [];
+      if (s.marks < 50) reasons.push("Low Marks (<50)");
+      if (s.att < 75) reasons.push("Low Attendance (<75%)");
+      attBody.innerHTML += `
+        <tr>
+          <td>${s.id}</td>
+          <td><strong>${s.name}</strong></td>
+          <td><span style="color: ${s.marks < 50 ? '#f87171' : 'inherit'}">${s.marks}</span></td>
+          <td><span style="color: ${s.att < 75 ? '#f87171' : 'inherit'}">${s.att}%</span></td>
+          <td>${getGradeBadge(s.grade)}</td>
+          <td>${getResultBadge(s.result)}</td>
+          <td><small style="color: #fca5a5">${reasons.join(', ')}</small></td>
+        </tr>
+      `;
+    });
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>
